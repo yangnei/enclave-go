@@ -25,11 +25,23 @@ type PerpsClient interface {
 	RemoveStopOrder(req *api.RemoveStopOrderRequest) ([]*model.StopOrder, error)
 	GetOpenInterest() ([]*model.OpenInterest, error)
 	GetVolume() ([]*model.Volume, error)
+
+	AddOrder(req *api.AddOrderRequest) (*model.Order, error)
+	GetOrders(req *api.GetOrdersRequest) (*api.GetOrdersResponse, error)
+	GetOrder(req *api.GetOrderRequest) (*model.Order, error)
+	GetOrdersCSV(req *api.GetOrdersCSVRequest) (string, error)
+	CancelOrder(req *api.CancelOrderRequest) (*model.Order, error)
+	CancelOrders(req *api.CancelOrdersRequest) error
+	GetDepth(req *api.GetDepthRequest) (*model.OrderBook, error)
+	GetFills(req *api.GetFillsRequest) ([]*model.Fill, error)
+	GetFillsByID(req *api.GetFillsByIDRequest) ([]*model.Fill, error)
+	GetFillsCSV(req *api.GetFillsCSVRequest) (string, error)
 }
 
 // perpsClient provides methods specific to the perpsClient API, calling an instance of BaseClient for requests and handling authentication.
 type perpsClient struct {
 	BaseClient
+	OrderFillClient
 }
 
 // NewPerpsClient initializes a new perpsClient client with the provided API key, API secret, and base URL.
@@ -41,6 +53,10 @@ func NewPerpsClient(apiKey, apiSecret, baseURL string) PerpsClient {
 func NewPerpsClientWithBase(baseClient BaseClient) PerpsClient {
 	return &perpsClient{
 		BaseClient: baseClient,
+		OrderFillClient: &orderFillClient{
+			BaseClient: baseClient,
+			prefix:     "/v1/perps",
+		},
 	}
 }
 

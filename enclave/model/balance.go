@@ -15,3 +15,11 @@ type Balance struct {
 	Leverage           decimal.Decimal `json:"leverage"`           // Effective leverage for the account
 	UnderLiquidation   bool            `json:"underLiquidation"`   // Whether the account is under liquidation
 }
+
+type AssetBalance struct {
+	AccountID       string `json:"accountId"`       // Account ID of the user
+	FreeBalance     string `json:"freeBalance"`     // Free balance of the coin
+	ReservedBalance string `json:"reservedBalance"` // Reserved balance held in open orders
+	Symbol          string `json:"symbol"`          // Symbol of the coin
+	TotalBalance    string `json:"totalBalance"`    // Total balance of the coin
+}

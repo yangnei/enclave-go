@@ -23,7 +23,7 @@ type BaseClient interface {
 	HandleError(res *http.Response) error
 }
 
-// baseClient handles basic requests and authentication that are common across spotClient, perpsClient, and Cross.
+// baseClient handles basic requests and authentication that are common across SpotClient, PerpsClient, and Cross.
 type baseClient struct {
 	BaseURL   string
 	KeyID     string
