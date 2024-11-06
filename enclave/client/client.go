@@ -10,8 +10,8 @@ import (
 )
 
 type Client interface {
-	SpotClient
-	PerpsClient
+	SpotClient() SpotClient
+	PerpsClient() PerpsClient
 
 	Hello() (*model.Hello, error)
 	AuthenticatedHello() (*model.AuthenticatedHello, error)
@@ -36,8 +36,8 @@ type Client interface {
 
 type client struct {
 	BaseClient
-	SpotClient
-	PerpsClient
+	sc SpotClient
+	pc PerpsClient
 }
 
 func NewClient(apiKey, apiSecret, baseURL string) Client {
@@ -46,10 +46,20 @@ func NewClient(apiKey, apiSecret, baseURL string) Client {
 
 func NewClientWithBase(base BaseClient) Client {
 	return &client{
-		BaseClient:  base,
-		SpotClient:  NewSpotClientWithBase(base),
-		PerpsClient: NewPerpsClientWithBase(base),
+		BaseClient: base,
+		sc:         NewSpotClientWithBase(base),
+		pc:         NewPerpsClientWithBase(base),
 	}
+}
+
+// SpotClient returns the spot client.
+func (c *client) SpotClient() SpotClient {
+	return c.sc
+}
+
+// PerpsClient returns the perps client.
+func (c *client) PerpsClient() PerpsClient {
+	return c.pc
 }
 
 // Hello returns the server's greeting message.
